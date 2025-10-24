@@ -8,14 +8,27 @@ import (
 )
 
 func main() {
-
+	// Инициализация базы данных
 	database, err := db.InitDB("realworld.db")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Failed to initialize database:", err)
 	}
 	defer database.Close()
 
-	api.Server{
+	// Проверка соединения с БД
+	if err := database.Ping(); err != nil {
+		log.Fatal("Failed to ping database:", err)
+	}
+	log.Println("✅ Database connected successfully")
+
+	// Создание и запуск сервера
+	server := api.Server{
 		Address: ":8080",
-	}.Run()
+		DB:      database,
+	}
+
+	log.Println("🚀 Starting server on", server.Address)
+	if err := server.Run(); err != nil {
+		log.Fatal("Failed to start server:", err)
+	}
 }

@@ -11,29 +11,34 @@ import (
 
 const createArticle = `-- name: CreateArticle :one
 INSERT INTO articles (slug, title, body) VALUES (?, ?, ?)
-RETURNING id, slug, title, body
+RETURNING id, slug, title, description, body, created_at, updated_at, favorites_count, author_id
 `
 
 type CreateArticleParams struct {
-	Slug  string
-	Title string
-	Body  string
+	Slug  string `json:"slug"`
+	Title string `json:"title"`
+	Body  string `json:"body"`
 }
 
-func (q *Queries) CreateArticle(ctx context.Context, arg CreateArticleParams) (Article, error) {
+func (q *Queries) CreateArticle(ctx context.Context, arg *CreateArticleParams) (Article, error) {
 	row := q.db.QueryRowContext(ctx, createArticle, arg.Slug, arg.Title, arg.Body)
 	var i Article
 	err := row.Scan(
 		&i.ID,
 		&i.Slug,
 		&i.Title,
+		&i.Description,
 		&i.Body,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.FavoritesCount,
+		&i.AuthorID,
 	)
 	return i, err
 }
 
 const getArticle = `-- name: GetArticle :one
-SELECT id, slug, title, body FROM articles WHERE slug = ?
+SELECT id, slug, title, description, body, created_at, updated_at, favorites_count, author_id FROM articles WHERE slug = ?
 `
 
 func (q *Queries) GetArticle(ctx context.Context, slug string) (Article, error) {
@@ -43,13 +48,18 @@ func (q *Queries) GetArticle(ctx context.Context, slug string) (Article, error) 
 		&i.ID,
 		&i.Slug,
 		&i.Title,
+		&i.Description,
 		&i.Body,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.FavoritesCount,
+		&i.AuthorID,
 	)
 	return i, err
 }
 
 const listArticles = `-- name: ListArticles :many
-SELECT id, slug, title, body FROM articles
+SELECT id, slug, title, description, body, created_at, updated_at, favorites_count, author_id FROM articles
 `
 
 func (q *Queries) ListArticles(ctx context.Context) ([]Article, error) {
@@ -58,14 +68,19 @@ func (q *Queries) ListArticles(ctx context.Context) ([]Article, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Article
+	items := []Article{}
 	for rows.Next() {
 		var i Article
 		if err := rows.Scan(
 			&i.ID,
 			&i.Slug,
 			&i.Title,
+			&i.Description,
 			&i.Body,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.FavoritesCount,
+			&i.AuthorID,
 		); err != nil {
 			return nil, err
 		}

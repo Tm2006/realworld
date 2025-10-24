@@ -4,9 +4,57 @@
 
 package db
 
+import (
+	"database/sql"
+	"time"
+)
+
 type Article struct {
-	ID    int64
-	Slug  string
-	Title string
-	Body  string
+	ID             int64         `json:"id"`
+	Slug           string        `json:"slug"`
+	Title          string        `json:"title"`
+	Description    string        `json:"description"`
+	Body           string        `json:"body"`
+	CreatedAt      time.Time     `json:"created_at"`
+	UpdatedAt      time.Time     `json:"updated_at"`
+	FavoritesCount int64         `json:"favorites_count"`
+	AuthorID       sql.NullInt64 `json:"author_id"`
+}
+
+type ArticleTag struct {
+	ArticleID sql.NullInt64 `json:"article_id"`
+	TagID     sql.NullInt64 `json:"tag_id"`
+}
+
+type Comment struct {
+	ID        int64         `json:"id"`
+	ArticleID sql.NullInt64 `json:"article_id"`
+	UserID    sql.NullInt64 `json:"user_id"`
+	Body      string        `json:"body"`
+	CreatedAt time.Time     `json:"created_at"`
+	UpdatedAt time.Time     `json:"updated_at"`
+}
+
+type Favorite struct {
+	UserID    sql.NullInt64 `json:"user_id"`
+	ArticleID sql.NullInt64 `json:"article_id"`
+}
+
+type Follow struct {
+	FollowerID sql.NullInt64 `json:"follower_id"`
+	FolloweeID sql.NullInt64 `json:"followee_id"`
+}
+
+type Tag struct {
+	ID  int64  `json:"id"`
+	Tag string `json:"tag"`
+}
+
+type User struct {
+	ID       int64          `json:"id"`
+	Email    string         `json:"email"`
+	Username string         `json:"username"`
+	Password string         `json:"password"`
+	Bio      sql.NullString `json:"bio"`
+	Image    sql.NullString `json:"image"`
 }

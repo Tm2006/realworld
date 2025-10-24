@@ -1,0 +1,44 @@
+{
+  "user_registration": {
+    "user": {
+      "username": "testuser",
+      "email": "test@example.com",
+      "password": "password123"
+    }
+  },
+  "user_login": {
+    "user": {
+      "email": "test@example.com", 
+      "password": "password123"
+    }
+  },
+  "user_update": {
+    "user": {
+      "email": "newemail@example.com",
+      "username": "newusername",
+      "bio": "Updated bio",
+      "image": "https://example.com/avatar.jpg"
+    }
+  },
+  "article_create": {
+    "article": {
+      "title": "How to train your dragon",
+      "description": "Ever wonder how?",
+      "body": "Very carefully. First, you need to understand that dragons are complex creatures...",
+      "tagList": ["dragons", "training", "fantasy"]
+    }
+  },
+  "article_update": {
+    "article": {
+      "title": "How to train your dragon - Updated",
+      "description": "Ever wonder how? Now with more details!",
+      "body": "Very carefully. Updated content with more information...",
+      "tagList": ["dragons", "training", "fantasy", "updated"]
+    }
+  },
+  "comment_create": {
+    "comment": {
+      "body": "Thanks for the article! Very helpful information about dragon training."
+    }
+  }
+}
